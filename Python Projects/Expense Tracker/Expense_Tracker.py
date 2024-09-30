@@ -17,8 +17,8 @@ import os
     #-Memory to store budget information, option to change budget
     #-must have logic to calculate new budget correctly, if budget exceeded, say 0 left - DONE
    
-    #can add more categories
-    #logic to determine most expensive expense/category/item
+    
+    #logic to determine most expensive expense/category/item - Done
     #data on spending patterns etc
 
 def main():
@@ -173,16 +173,26 @@ def summarize_expenses(expense_file_path,budget):
         print("You cannot spend anymore this month!")
     else:
         print(f"budget remaing this month: ${budget_left:.2f}\n")
-    
+        
+        
         #daily budget
         now = datetime.datetime.now() #today
         theMonth = now.strftime("%B")
         days_in_month = calendar.monthrange(now.year, now.month)[1] #no of days in month
         remaining_days = days_in_month - now.day
-        print(f"Days left in {theMonth}: {remaining_days} days")
+        if remaining_days == 0: #last day of the month assume one day left
+            remaining_days=1
+            print("This is the last day of the month.")
+        else:
+            print(f"Days left in {theMonth}: {remaining_days} days")
 
         daily_budget = budget_left/remaining_days
         print(f"Budget per day: ${daily_budget:.2f}")
+    #Calculating most expensive category
+    if amount_by_category:
+        most_expensive_category = max(amount_by_category, key=amount_by_category.get)
+        most_expensive_amount = amount_by_category[most_expensive_category]
+        print(f"The most expensive category is '{most_expensive_category}' with a total of ${most_expensive_amount:.2f}")
     
 if __name__== "__main__": #this causes the main method to run only when we run this file direclty!,
     #if we import this into another file it prevents the main method from running when we run that file
